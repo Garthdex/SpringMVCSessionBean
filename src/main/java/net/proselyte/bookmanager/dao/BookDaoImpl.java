@@ -1,6 +1,7 @@
 package net.proselyte.bookmanager.dao;
 
 import net.proselyte.bookmanager.model.Book;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -41,16 +42,18 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Book getBookById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Book book = (Book) session.load(Book.class, new Integer(id));
+        Book book = (Book) session.get(Book.class, new Integer(id));
 
         return book;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(value = "unchecked")
     public List<Book> listBooks() {
         Session session = this.sessionFactory.getCurrentSession();
-        List<Book> bookList = session.createQuery("from book").list();
+        String s = "from Book";
+        Query query = session.createQuery(s);
+        List<Book> bookList = query.list();
 
         return bookList;
     }

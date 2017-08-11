@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class BookController {
@@ -40,6 +37,13 @@ public class BookController {
         return "redirect:/books";
     }
 
+    @RequestMapping(value = "/books/add/ajax", method = RequestMethod.POST)
+    public @ResponseBody String addBookAjax(@RequestBody Book book){
+        this.bookService.addBook(book);
+
+        return "{\"rts\":\"dasda\"}";
+    }
+
     @RequestMapping("/remove/{id}")
     public String removeBook(@PathVariable("id") int id){
         this.bookService.removeBook(id);
@@ -53,12 +57,5 @@ public class BookController {
         model.addAttribute("listBooks", this.bookService.listBooks());
 
         return "books";
-    }
-
-    @RequestMapping("bookdata/{id}")
-    public String bookData(@PathVariable("id") int id, Model model){
-        model.addAttribute("book", this.bookService.getBookById(id));
-
-        return "bookdata";
     }
 }
