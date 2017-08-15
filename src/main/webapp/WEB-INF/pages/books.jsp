@@ -5,7 +5,7 @@
 <%@ page session="false" %>
 <html>
 <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="<c:url value="/resources/content/js/ajax.js"/>" type="text/javascript"></script>
     <title>Books Page</title>
 </head>
@@ -15,10 +15,10 @@
 <br/>
 <br/>
 
-<h1>Add a Book</h1>
+<h1>Add a book by ajax</h1>
 
-<div id = "showAjax"></div>
-<div id = "addBookFromResponse"></div>
+<div class = "showAjax"></div>
+<div class = "addBookFromResponse"></div>
 <c:url var="addActionAjax" value="/books/add/ajax"/>
 <form:form id="newBookForm" action="${addActionAjax}" commandName="book" modelAttribute="book">
     <table>
@@ -40,14 +40,29 @@
             <td><form:input path="bookAuthor"/></td>
         </tr>
         <tr>
-            <td><input class="sendBook" type="submit" value="create" /></td>
+            <td colspan="2">
+                <c:if test="${!empty book.bookTitle}">
+                    <input type="submit"
+                           value="<spring:message text="Edit Book Ajax"/>"/>
+                </c:if>
+                <c:if test="${empty book.bookTitle}">
+                    <input type="submit"
+                           value="<spring:message text="Add Book Ajax"/>"/>
+                </c:if>
+            </td>
         </tr>
         </tbody>
     </table>
 </form:form>
 
+<h1>Booklist from ajax</h1>
+<div class="fromAjax">
+
+</div>
+
 ___________________________________________________________________________________________________________
 <c:url var="addAction" value="/books/add"/>
+<h1>Add a book</h1>
 <form:form action="${addAction}" commandName="book" modelAttribute="book">
     <table>
         <c:if test="${!empty book.bookTitle}">
@@ -98,7 +113,7 @@ ________________________________________________________________________________
     </table>
 </form:form>
 
-<h1>Book List</h1>
+<h1>Booklist</h1>
 
 <c:if test="${!empty listBooks}">
     <table>
@@ -114,8 +129,8 @@ ________________________________________________________________________________
                 <td>${book.id}</td>
                 <td>${book.bookTitle}</td>
                 <td>${book.bookAuthor}</td>
-                <td><a href="<c:url value='/edit/${book.id}'/>">Edit</a></td>
-                <td><a href="<c:url value='/remove/${book.id}'/>">Delete</a></td>
+                <td><a href="<c:url value='books/edit/${book.id}'/>">Edit</a></td>
+                <td><a href="<c:url value='books/remove/${book.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
     </table>
