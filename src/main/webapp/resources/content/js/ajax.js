@@ -5,10 +5,24 @@ $(document).ready(function () {
     body.on('click', '.jsDeleteButton', function () {
         deleteBook($(this).val());
     });
+    body.on('click', '.jsEditButton', function () {
+        $('.sendBook').prop("disabled", true);
+        $('.editBook').prop("disabled", false);
+        $('.addDiv').css({'display' : "none"});
+        $('.editDiv').css({'display' : "block"});
+        $('.labelBookId').css({'display' : "block"});
+        $('.inputBookId').css({'display' : "block"});
+        getBook($(this).val());
+    })
+    body.on('click', '.editBook', function () {
+        editBook();
+        $('.sendBook').prop("disabled", false);
+        $('.editBook').prop("disabled", true);
+    })
 
     $('#newBookForm').submit(function (event) {
-        var title = $('#bookTitle').val();
-        var author = $('#bookAuthor').val();
+        var title = $('.bookTitle').val();
+        var author = $('.bookAuthor').val();
         json = {"bookTitle" : title, "bookAuthor" : author};
 
         $.ajax({
@@ -57,6 +71,22 @@ $(document).ready(function () {
             }
         })
     }
+    
+    function getBook(id) {
+        $.ajax({
+            type: 'GET',
+            url: window.location.origin + '/books/ajax/' + id,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: true,
+            success: function (s) {
+                fillEditFields(s);
+            },
+            error: function (e) {
+                alert(e.responseText);
+            }
+        });
+    }
 
     function fillTable(items) {
         var trHTML = '<table>\n' +
@@ -90,11 +120,12 @@ $(document).ready(function () {
 
         $.ajax({
             type: "DELETE",
-            url: window.location.origin + '/remove/ajax/' + id,
+            url: window.location.origin + '/books/remove/ajax/' + id,
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: true,
             success: function (s) {
+
                 successDeleteMessage(s);
                 getBooks();
             },
@@ -102,7 +133,7 @@ $(document).ready(function () {
 
                 alert(e.responseText);
             }
-        })
+        });
     }
 
     function successDeleteMessage (book) {
@@ -116,4 +147,61 @@ $(document).ready(function () {
         $(".addBookFromResponse").html(respContent);
     }
 
+    function editBook() {
+        var book = getBookFromFields();
+
+        $.ajax({
+            type: 'PUT',
+            url: window.location.origin + '/books/edit/ajax',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(book),
+            dataType: 'json',
+            async: true,
+            success: function (s) {
+                changeVisible();
+                getBooks();
+                successEditMessage();
+            },
+            error: function (e) {
+                alert(e.responseText);
+            }
+        });
+    }
+
+    function successEditMessage () {
+        $(".showAjax").html(json);
+        var respContent = "";
+
+        respContent += "<span class='success'>Book succssesfully edited</span>";
+
+        $(".addBookFromResponse").html(respContent);
+    }
+    
+    function changeVisible() {
+        $('.addDiv').css({'display' : "block"});
+        $('.editDiv').css({'display' : "none"});
+        $('.labelBookId').css({'display' : "none"});
+        $('.inputBookId').css({'display' : "none"});
+        refreshFields();
+    }
+
+    function refreshFields() {
+        $('.bookTitle').val("");
+        $('.bookAuthor').val("");
+    }
+    
+    function getBookFromFields() {
+        var book = {};
+        book["id"] = $('.inputBookId').val();
+        book["bookTitle"] = $('.bookTitle').val();
+        book["bookAuthor"] = $('.bookAuthor').val();
+
+        return book;
+    }
+    
+    function fillEditFields(book) {
+        $('.inputBookId').val(book.id);
+        $('.bookTitle').val(book.bookTitle);
+        $('.bookAuthor').val(book.bookAuthor);
+    }
 });

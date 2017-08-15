@@ -20,45 +20,30 @@
 <div class = "showAjax"></div>
 <div class = "addBookFromResponse"></div>
 <c:url var="addActionAjax" value="/books/add/ajax"/>
-<form:form id="newBookForm" action="${addActionAjax}" commandName="book" modelAttribute="book">
-    <table>
-        <tbody>
-        <tr>
-            <td>
-                <form:label path="bookTitle">
-                    <spring:message text="Title"/>
-                </form:label>
-            </td>
-            <td><form:input path="bookTitle"/></td>
-        </tr>
-        <tr>
-            <td>
-                <form:label path="bookAuthor">
-                    <spring:message text="Author"/>
-                </form:label>
-            </td>
-            <td><form:input path="bookAuthor"/></td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <c:if test="${!empty book.bookTitle}">
-                    <input type="submit"
-                           value="<spring:message text="Edit Book Ajax"/>"/>
-                </c:if>
-                <c:if test="${empty book.bookTitle}">
-                    <input type="submit"
-                           value="<spring:message text="Add Book Ajax"/>"/>
-                </c:if>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</form:form>
+<form id="newBookForm" action="${addActionAjax}">
+    <div>
+        <label class="labelBookId" style="display: none">ID</label>
+        <input class="inputBookId" readonly size="8" disabled value="" style="display: none"/>
+    </div>
+    <div>
+        <label>Title</label>
+        <input class="bookTitle"/>
+    </div>
+    <div>
+        <label>Author</label>
+        <input class="bookAuthor"/>
+    </div>
+    <div class="addDiv" style="display: block">
+        <input class="sendBook" type="submit" value="Add book ajax" />
+    </div>
+    <div class="editDiv" style="display: none">
+        <input class="editBook" type="submit" value="Edit book ajax" disabled/>
+    </div>
+
+</form>
 
 <h1>Booklist from ajax</h1>
-<div class="fromAjax">
-
-</div>
+<div class="fromAjax"></div>
 
 ___________________________________________________________________________________________________________
 <c:url var="addAction" value="/books/add"/>

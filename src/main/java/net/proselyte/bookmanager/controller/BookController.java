@@ -35,6 +35,13 @@ public class BookController {
         return bookService.listBooks();
     }
 
+    @RequestMapping(value = "books/ajax/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Book getBookAjax(@PathVariable("id") int id){
+
+        return bookService.getBookById(id);
+    }
+
     @RequestMapping(value = "/books/add", method = RequestMethod.POST)
     public String addBook(@ModelAttribute("book") Book book){
         if(book.getId() == 0){
@@ -75,4 +82,10 @@ public class BookController {
         return "books";
     }
 
+    @RequestMapping(value = "books/edit/ajax")
+    @ResponseBody
+    public Book editBook(@RequestBody Book book){
+
+        return bookService.updateBook(book);
+    }
 }
