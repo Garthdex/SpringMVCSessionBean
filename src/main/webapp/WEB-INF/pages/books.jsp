@@ -7,6 +7,7 @@
 <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="<c:url value="/resources/content/js/ajax.js"/>" type="text/javascript"></script>
+    <link href="<c:url value="/resources/css/style.css"/>" rel="stylesheet" type="text/css" media="all">
     <title>Books Page</title>
 </head>
 <body>
@@ -37,14 +38,13 @@
         <input class="sendBook" type="submit" value="Add book ajax" />
     </div>
     <div class="editDiv" style="display: none">
-        <input class="editBook" type="submit" value="Edit book ajax" disabled/>
+        <input class="editBook" type="submit" value="Edit book ajax" disabled="true"/>
     </div>
 
 </form>
 
 <h1>Booklist from ajax</h1>
 <div class="fromAjax"></div>
-
 ___________________________________________________________________________________________________________
 <c:url var="addAction" value="/books/add"/>
 <h1>Add a book</h1>
@@ -101,7 +101,7 @@ ________________________________________________________________________________
 <h1>Booklist</h1>
 
 <c:if test="${!empty listBooks}">
-    <table>
+    <table class="tg">
         <tr>
             <th width="80">ID</th>
             <th width="120">Title</th>

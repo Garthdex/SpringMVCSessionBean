@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var count = 1;
     getBooks();
     var json = '';
     var body = $('body');
@@ -13,17 +14,23 @@ $(document).ready(function () {
         $('.labelBookId').css({'display' : "block"});
         $('.inputBookId').css({'display' : "block"});
         getBook($(this).val());
-    })
+    });
     body.on('click', '.editBook', function () {
         editBook();
         $('.sendBook').prop("disabled", false);
         $('.editBook').prop("disabled", true);
-    })
+    });
 
     $('#newBookForm').submit(function (event) {
+        var counter = (function () {
+            return function () {
+                return count++;
+            }
+        }());
+        var i = counter();
         var title = $('.bookTitle').val();
         var author = $('.bookAuthor').val();
-        json = {"bookTitle" : title, "bookAuthor" : author};
+        json = {"id" : i, "bookTitle" : title, "bookAuthor" : author};
 
         $.ajax({
             url: window.location.origin + '/books/add/ajax',
@@ -33,7 +40,7 @@ $(document).ready(function () {
             dataType: 'json',
             async: true,
             success: function(s) {
-                successMessage(s)
+                successMessage(s);
                 getBooks();
             },
             error: function(e) {
@@ -89,7 +96,7 @@ $(document).ready(function () {
     }
 
     function fillTable(items) {
-        var trHTML = '<table>\n' +
+        var trHTML = '<table class="tg">\n' +
             '        <tbody>\n' +
             '        <tr>\n' +
             '            <th width="80">ID</th>\n' +
